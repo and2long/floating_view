@@ -10,30 +10,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: <TargetPlatform, PageTransitionsBuilder>{
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-          },
-        )
-      ),
-      // builder: (BuildContext context, Widget? child) {
-      //   return LayoutBuilder(
-      //       builder: (BuildContext context, BoxConstraints constraints) {
-      //     if (constraints.maxWidth > 600) {
-      //       return Center(
-      //         child: Container(
-      //           width: 600,
-      //           child: child,
-      //         ),
-      //       );
-      //     }else{
-      //       return child!;
-      //     }
-      //   });
-      // },
       home: HomePage(),
     );
   }
@@ -48,31 +24,36 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+        Duration.zero,
+        () => TestOverLay.show(
+              context: context,
+              view: Material(
+                child: Container(
+                  width: 100,
+                  color: Colors.orange,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Center(child: Text('我是一个\n悬浮组件')),
+                  ),
+                ),
+              ),
+            ));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text('Home'),
+      appBar: AppBar(title: Text('Page1')),
+      body: Center(child: Text('Page1')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (c) => Page2()));
+        },
+        child: Icon(Icons.keyboard_arrow_right),
       ),
-      body: Center(
-        child: ElevatedButton(
-          child: Text('go page2'),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (c) => Page2()));
-          },
-        ),
-      ),
-      floatingActionButton: IconButton(
-          onPressed: () {
-            TestOverLay.show(
-                context: context,
-                view: Material(
-                    child: OutlinedButton(
-                  child: Text('悬浮窗'),
-                  onPressed: () {},
-                )));
-          },
-          icon: Icon(Icons.add)),
     );
   }
 }
@@ -84,7 +65,10 @@ class Page2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('page2'),
+        title: Text('Page2'),
+      ),
+      body: Center(
+        child: Text('Page2'),
       ),
     );
   }
